@@ -1,39 +1,13 @@
-"""
-SONiC SNMP agent — BUILD.bazel added on claude branch.
+"""sonic-snmpagent Python wheel — migrated from rules/sonic-snmpagent.mk."""
 
-Migration status: Phase 1 Bazel migration.
-Build type: Python setuptools → .whl + .deb
-"""
-
-load("@rules_python//python:defs.bzl", "py_library")
 load("//rules/bazel/wheel:wheel.bzl", "sonic_wheel")
-load("//rules/bazel/deb:deb.bzl", "deb_package_set")
 
 package(default_visibility = ["//visibility:public"])
 
-filegroup(
-    name = "all_srcs",
-    srcs = glob(
-        ["**/*.py", "setup.py", "setup.cfg", "pyproject.toml",
-         "debian/**/*", "*.cfg", "*.toml"],
-        exclude = [".git/**", "__pycache__/**", "*.pyc"],
-    ),
-)
-
 sonic_wheel(
-    name = "sonic-snmpagent_wheel",
+    name = "sonic_snmpagent_wheel",
     distribution = "sonic-snmpagent",
-    version = "$(PKG_VERSION)",
-    deps = [":all_srcs"],
+    version = "1.0",
+    summary = "SONiC SNMP agent for network management.",
     visibility = ["//visibility:public"],
 )
-
-deb_package_set(
-    name = "sonic-snmpagent_debs",
-    srcs = [":all_srcs"],
-    debian_dir = "debian",
-    version = "$(PKG_VERSION)",
-    declared_outputs = ["sonic-snmpagent.deb"],
-    visibility = ["//visibility:public"],
-)
-
